@@ -21,3 +21,16 @@ export interface IStudent {
 	address: string;
 	phone: string;
 }
+
+export interface IMark {
+	id: number;
+	mark: number | string;
+	student_id: number;
+}
+
+export interface IMavzular {
+	id: number;
+	name: string;
+	dars: IMark[];
+	uy_vazifa: IMark[];
+}
