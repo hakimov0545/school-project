@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import TeacherPanel from "./Pages/TeacherPanel";
 import { IClass, IStudent, ITeacher } from "./Types";
