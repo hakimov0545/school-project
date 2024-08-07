@@ -4,7 +4,7 @@ import TeacherPanel from "./Pages/TeacherPanel";
 import { IClass, IStudent, ITeacher } from "./Types";
 import { classesData, studentsData, teachersData } from "./Data";
 
-export const DataContext = React.createContext<{
+export const DataContext = createContext<{
   classes: IClass[];
   setClasses: (classes: IClass[]) => void;
   teachers: ITeacher[];
