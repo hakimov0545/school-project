@@ -1,35 +1,39 @@
 export interface IClass {
-	id: number;
+	id: string | number;
 	name: string;
-	teacher_id: number;
+	teacherId: string | number;
 }
 
 export interface ITeacher {
-	id: number;
+	id: string | number;
 	firstName: string;
 	lastName: string;
-	address: string;
-	subject: string;
-	phone: string;
+	adress?: string;
+	subject?: string;
+	phone?: string;
+	classId: string | number;
+	photo?: string;
 }
 
 export interface IStudent {
-	id: number;
+	id: string | number;
 	firstName: string;
 	lastName: string;
-	class_id: number;
-	address: string;
+	classId: string | number;
+	adress: string;
 	phone: string;
+	teacherId: number | string;
+	photo: string;
 }
 
 export interface IMark {
-	id: number;
+	id: string | number;
 	mark: number | string;
-	student_id: number;
+	studentId: string | number;
 }
 
 export interface IMavzular {
-	id: number;
+	id: string | number;
 	name: string;
 	dars: IMark[];
 	uy_vazifa: IMark[];
