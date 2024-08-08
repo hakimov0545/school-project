@@ -11,6 +11,7 @@ import { ClassData, StudentData, TeacherData } from "./Data";
 import { RouteContext, RouteData } from "./Context";
 import { Dashboard } from "./Pages/Dashboard";
 import Layout from "./Layout";
+import { ConfigProvider } from "antd";
 
 const pages: Record<string, React.ReactNode> = {
 	Dashboard: <Dashboard />,
@@ -29,7 +30,9 @@ function App() {
 	const [activePage, setActivePage] = useState("Dashboard");
 
 	return (
-		<React.Fragment>
+		<ConfigProvider
+			theme={{ token: { colorPrimary: "#00b96b" } }}
+		>
 			<RouteContext.Provider
 				value={{ activePage, setActivePage }}
 			>
@@ -46,7 +49,7 @@ function App() {
 					<Layout>{pages[activePage]}</Layout>
 				</RouteData.Provider>
 			</RouteContext.Provider>
-		</React.Fragment>
+		</ConfigProvider>
 	);
 }
 
