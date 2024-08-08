@@ -13,41 +13,39 @@ import { Dashboard } from "./Pages/Dashboard";
 import Layout from "./Layout";
 
 const pages: Record<string, React.ReactNode> = {
-	Dashboard: <Dashboard />,
-	Teachers: <Teachers />,
-	Students: <Students />,
-	Classes: <Classes />,
-	Parents: <Parents />,
-	Timetable: <Timetable />,
-	Marks: <Marks />,
+  Dashboard: <Dashboard />,
+  Teachers: <Teachers />,
+  Students: <Students />,
+  Classes: <Classes />,
+  Parents: <Parents />,
+  Timetable: <Timetable />,
+  Marks: <Marks />,
 };
 
 function App() {
-	const [classes, setClasses] = useState<IClass[]>(ClassData);
-	const [teachers, setTeachers] = useState<ITeacher[]>(TeacherData);
-	const [students, setStudents] = useState<IStudent[]>(StudentData);
-	const [activePage, setActivePage] = useState("Dashboard");
+  const [classes, setClasses] = useState<IClass[]>(ClassData);
+  const [teachers, setTeachers] = useState<ITeacher[]>(TeacherData);
+  const [students, setStudents] = useState<IStudent[]>(StudentData);
+  const [activePage, setActivePage] = useState("Dashboard");
 
-	return (
-		<React.Fragment>
-			<RouteContext.Provider
-				value={{ activePage, setActivePage }}
-			>
-				<RouteData.Provider
-					value={{
-						classes,
-						setClasses,
-						teachers,
-						setTeachers,
-						students,
-						setStudents,
-					}}
-				>
-					<Layout>{pages[activePage]}</Layout>
-				</RouteData.Provider>
-			</RouteContext.Provider>
-		</React.Fragment>
-	);
+  return (
+    <React.Fragment>
+      <RouteContext.Provider value={{ activePage, setActivePage }}>
+        <RouteData.Provider
+          value={{
+            classes,
+            setClasses,
+            teachers,
+            setTeachers,
+            students,
+            setStudents,
+          }}
+        >
+          <Layout>{pages[activePage]}</Layout>
+        </RouteData.Provider>
+      </RouteContext.Provider>
+    </React.Fragment>
+  );
 }
 
 export default App;
