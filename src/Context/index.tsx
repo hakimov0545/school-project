@@ -30,3 +30,7 @@ export const RouteClassesData = React.createContext({
 	classes: [],
 	setClasses: (classes: IClass[]) => {},
 });
+
+export const useRouteData = () => {
+	return useContext(RouteData);
+};

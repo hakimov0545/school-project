@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import {
 	MenuFoldOutlined,
 	MenuUnfoldOutlined,
-	UploadOutlined,
-	UserOutlined,
-	VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Button, Layout as AntdLayout, Menu, theme } from "antd";
 import { useRouteContext } from "../Context";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { IoPeople } from "react-icons/io5";
+import { PiChalkboardTeacherLight } from "react-icons/pi";
+import { PiStudent } from "react-icons/pi";
+import { IoIosPeople } from "react-icons/io";
+import { BsFillJournalBookmarkFill } from "react-icons/bs";
+import { FaTableList } from "react-icons/fa6";
 
 const { Header, Sider, Content } = AntdLayout;
 
@@ -20,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 	const { activePage, setActivePage } = useRouteContext();
 
 	return (
-		<AntdLayout className="h-screen">
+		<AntdLayout className="h-screen overflow-hidden">
 			<Sider trigger={null} collapsible collapsed={collapsed}>
 				<div className="demo-logo-vertical" />
 				<Menu
@@ -33,37 +37,37 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 					items={[
 						{
 							key: "Dashboard",
-							icon: <UserOutlined />,
+							icon: <LuLayoutDashboard />,
 							label: "Dashboard",
 						},
 						{
 							key: "Classes",
-							icon: <VideoCameraOutlined />,
+							icon: <IoIosPeople />,
 							label: "Classes",
 						},
 						{
 							key: "Teachers",
-							icon: <UploadOutlined />,
+							icon: <PiChalkboardTeacherLight />,
 							label: "Teachers",
 						},
 						{
 							key: "Students",
-							icon: <UploadOutlined />,
+							icon: <PiStudent />,
 							label: "Students",
 						},
 						{
 							key: "Parents",
-							icon: <UploadOutlined />,
+							icon: <IoPeople />,
 							label: "Parents",
 						},
 						{
 							key: "Marks",
-							icon: <UploadOutlined />,
+							icon: <BsFillJournalBookmarkFill />,
 							label: "Marks",
 						},
 						{
 							key: "Timetable",
-							icon: <UploadOutlined />,
+							icon: <FaTableList />,
 							label: "Timetable",
 						},
 					]}
@@ -100,6 +104,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 						minHeight: 280,
 						background: colorBgContainer,
 						borderRadius: borderRadiusLG,
+						overflowY: "auto",
 					}}
 				>
 					{children}

@@ -11,6 +11,7 @@ import { ClassData, StudentData, TeacherData } from "./Data";
 import { RouteContext, RouteData } from "./Context";
 import { Dashboard } from "./Pages/Dashboard";
 import Layout from "./Layout";
+import { ConfigProvider } from "antd";
 
 const pages: Record<string, React.ReactNode> = {
   Dashboard: <Dashboard />,
@@ -28,24 +29,29 @@ function App() {
   const [students, setStudents] = useState<IStudent[]>(StudentData);
   const [activePage, setActivePage] = useState("Dashboard");
 
-  return (
-    <React.Fragment>
-      <RouteContext.Provider value={{ activePage, setActivePage }}>
-        <RouteData.Provider
-          value={{
-            classes,
-            setClasses,
-            teachers,
-            setTeachers,
-            students,
-            setStudents,
-          }}
-        >
-          <Layout>{pages[activePage]}</Layout>
-        </RouteData.Provider>
-      </RouteContext.Provider>
-    </React.Fragment>
-  );
+
+	return (
+		<ConfigProvider
+			theme={{ token: { colorPrimary: "#00b96b" } }}
+		>
+			<RouteContext.Provider
+				value={{ activePage, setActivePage }}
+			>
+				<RouteData.Provider
+					value={{
+						classes,
+						setClasses,
+						teachers,
+						setTeachers,
+						students,
+						setStudents,
+					}}
+				>
+					<Layout>{pages[activePage]}</Layout>
+				</RouteData.Provider>
+			</RouteContext.Provider>
+		</ConfigProvider>
+	);
 }
 
 export default App;

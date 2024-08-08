@@ -134,4 +134,5 @@ export const Students = () => {
       ></Table>
     </>
   );
+
 };
