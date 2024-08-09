@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { useRouteData } from "../Context";
 import {
 	Button,
 	Drawer,
 	Form,
 	Input,
+	message,
 	Select,
 	Table,
 	Typography,
@@ -25,70 +31,89 @@ export const Classes = () => {
 	const [editingClass, setEditingClass] = useState<IClass | null>(
 		null
 	);
+	const onDelete = useCallback(
+		(id: string | number) => {
+			const filteredClasses = classes.filter(
+				(cls) => cls.id !== id
+			);
+			setClasses(filteredClasses);
+		},
+		[classes]
+	);
 
-	const columns = [
-		{
-			title: "ID",
-			dataIndex: "id",
-			key: "id",
-			render: (value: string, item: IClass, index: number) =>
-				index + 1,
-		},
-		{
-			title: "Name",
-			dataIndex: "name",
-			key: "name",
-		},
-		{
-			title: "Students Count",
-			dataIndex: "id",
-			key: "id",
-			render: (value: string | number) => {
-				const student = students.filter(
-					(s) => s.classId == value
-				);
-				return `${student.length}`;
+	const columns = useMemo(
+		() => [
+			{
+				title: "ID",
+				dataIndex: "id",
+				key: "id",
+				render: (
+					value: string,
+					item: IClass,
+					index: number
+				) => index + 1,
 			},
-		},
-		{
-			title: "Teacher",
-			dataIndex: "teacherId",
-			key: "teacherId",
-			render: (id: string) => {
-				const teacher = teachers.find((t) => t.id === id);
-				return teacher
-					? `${teacher.firstName} ${teacher.lastName}`
-					: " - ";
+			{
+				title: "Name",
+				dataIndex: "name",
+				key: "name",
 			},
-		},
-		{
-			title: "Actions",
-			dataIndex: "id",
-			key: "teacherId",
-			render: (value: string, item: IClass) => {
-				return (
-					<>
-						<Button
-							type="text"
-							className="text-blue-500 text-xl"
-							size="middle"
-							onClick={() => onEdit(item)}
-						>
-							<CiEdit />
-						</Button>
-						<Button
-							type="text"
-							className="text-red-500 text-lg"
-							size="middle"
-							onClick={() => onDelete(item.id)}
-						>
-							<LuTrash2 />
-						</Button>
-					</>
-				);
+			{
+				title: "Students Count",
+				dataIndex: "id",
+				key: "id",
+				render: (value: string | number) => {
+					const student = students.filter(
+						(s) => s.classId == value
+					);
+					return `${student.length}`;
+				},
 			},
-		},
-	];
+			{
+				title: "Teacher",
+				dataIndex: "teacherId",
+				key: "teacherId",
+				render: (id: string) => {
+					const teacher = teachers.find((t) => t.id === id);
+					return teacher
+						? `${teacher.firstName} ${teacher.lastName}`
+						: " - ";
+				},
+			},
+			{
+				title: "Actions",
+				dataIndex: "id",
+				key: "teacherId",
+				render: (value: string, item: IClass) => {
+					return (
+						<>
+							<Button
+								type="text"
+								className="text-blue-500 text-xl"
+								size="middle"
+								onClick={() => onEdit(item)}
+							>
+								<CiEdit />
+							</Button>
+							<Button
+								type="text"
+								className="text-red-500 text-lg"
+								size="middle"
+								onClick={() => onDelete(item.id)}
+							>
+								<LuTrash2 />
+							</Button>
+						</>
+					);
+				},
+			},
+		],
+		[onDelete, teachers]
+	);
+
+	useEffect(() => {
+		console.log("columns ozgardi");
+	}, [columns]);
 
 	const onFinish = (values: Omit<IClass, "id">) => {
 		if (editingClass) {
@@ -98,8 +123,10 @@ export const Classes = () => {
 					: cls
 			);
 			setClasses(updatedClasses);
+			message.success("Updated successfully");
 		} else {
 			setClasses([...classes, { ...values, id: uuidv4() }]);
+			message.success("Created successfully");
 		}
 		form.resetFields();
 		setEditingClass(null);
@@ -113,13 +140,6 @@ export const Classes = () => {
 			teacherId: item.teacherId,
 		});
 		setOpen(true);
-	};
-
-	const onDelete = (id: string | number) => {
-		const filteredClasses = classes.filter(
-			(cls) => cls.id !== id
-		);
-		setClasses(filteredClasses);
 	};
 
 	return (

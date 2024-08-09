@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useRouteData } from "../Context";
 import {
 	Button,
 	Drawer,
 	Form,
 	Input,
+	message,
 	Select,
 	Table,
 	Typography,
@@ -24,67 +25,83 @@ export const Teachers = () => {
 	const [editingTeacher, setEditingTeacher] =
 		useState<ITeacher | null>(null);
 
-	const columns = [
-		{
-			title: "ID",
-			dataIndex: "id",
-			key: "id",
-			render: (value: string, item: ITeacher, index: number) =>
-				index + 1,
+	const onDelete = useCallback(
+		(id: string | number) => {
+			const filteredTeachers = teachers.filter(
+				(t) => t.id !== id
+			);
+			setTeachers(filteredTeachers);
 		},
-		{
-			title: "First Name",
-			dataIndex: "firstName",
-			key: "firstName",
-		},
-		{
-			title: "Last Name",
-			dataIndex: "lastName",
-			key: "lastName",
-		},
-		{
-			title: "Adress",
-			dataIndex: "adress",
-			key: "adress",
-		},
-		{
-			title: "Subject",
-			dataIndex: "subject",
-			key: "subject",
-		},
-		{
-			title: "Phone",
-			dataIndex: "phone",
-			key: "phone",
-		},
-		{
-			title: "Actions",
-			dataIndex: "id",
-			key: "id",
-			render: (value: string, item: ITeacher) => {
-				return (
-					<>
-						<Button
-							type="text"
-							className="text-blue-500 text-xl"
-							size="middle"
-							onClick={() => onEdit(item)}
-						>
-							<CiEdit />
-						</Button>
-						<Button
-							type="text"
-							className="text-red-500 text-lg"
-							size="middle"
-							onClick={() => onDelete(item.id)}
-						>
-							<LuTrash2 />
-						</Button>
-					</>
-				);
+		[teachers]
+	);
+
+	const columns = useMemo(
+		() => [
+			{
+				title: "ID",
+				dataIndex: "id",
+				key: "id",
+				render: (
+					value: string,
+					item: ITeacher,
+					index: number
+				) => index + 1,
 			},
-		},
-	];
+			{
+				title: "First Name",
+				dataIndex: "firstName",
+				key: "firstName",
+			},
+			{
+				title: "Last Name",
+				dataIndex: "lastName",
+				key: "lastName",
+			},
+			{
+				title: "Adress",
+				dataIndex: "adress",
+				key: "adress",
+			},
+			{
+				title: "Subject",
+				dataIndex: "subject",
+				key: "subject",
+			},
+			{
+				title: "Phone",
+				dataIndex: "phone",
+				key: "phone",
+			},
+			{
+				title: "Actions",
+				dataIndex: "id",
+				key: "id",
+				render: (value: string, item: ITeacher) => {
+					return (
+						<>
+							<Button
+								type="text"
+								className="text-blue-500 text-xl"
+								size="middle"
+								onClick={() => onEdit(item)}
+							>
+								<CiEdit />
+							</Button>
+							<Button
+								type="text"
+								className="text-red-500 text-lg"
+								size="middle"
+								onClick={() => onDelete(item.id)}
+							>
+								<LuTrash2 />
+							</Button>
+						</>
+					);
+				},
+			},
+		],
+		[onDelete]
+	);
 
 	const onFinish = (values: Omit<ITeacher, "id">) => {
 		if (editingTeacher) {
@@ -92,8 +109,10 @@ export const Teachers = () => {
 				t.id === editingTeacher.id ? { ...t, ...values } : t
 			);
 			setTeachers(updatedTeachers);
+			message.success("Updated successfully");
 		} else {
 			setTeachers([...teachers, { ...values, id: uuidv4() }]);
+			message.success("Created successfully");
 		}
 		form.resetFields();
 		setEditingTeacher(null);
@@ -110,11 +129,6 @@ export const Teachers = () => {
 			phone: item.phone,
 		});
 		setOpen(true);
-	};
-
-	const onDelete = (id: string | number) => {
-		const filteredTeachers = teachers.filter((t) => t.id !== id);
-		setTeachers(filteredTeachers);
 	};
 
 	return (

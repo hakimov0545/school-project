@@ -11,7 +11,7 @@ import { ClassData, StudentData, TeacherData, ParentData } from "./Data";
 import { RouteContext, RouteData } from "./Context";
 import { Dashboard } from "./Pages/Dashboard";
 import Layout from "./Layout";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, App as AntdApp } from "antd";
 
 const pages: Record<string, React.ReactNode> = {
   Dashboard: <Dashboard />,
@@ -46,7 +46,9 @@ function App() {
             setParents,
           }}
         >
-          <Layout>{pages[activePage]}</Layout>
+          <AntdApp>
+            <Layout>{pages[activePage]}</Layout>
+          </AntdApp>
         </RouteData.Provider>
       </RouteContext.Provider>
     </ConfigProvider>
