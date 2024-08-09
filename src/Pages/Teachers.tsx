@@ -13,8 +13,9 @@ import {
 import { ITeacher } from "../Types";
 import { CiEdit } from "react-icons/ci";
 import { LuTrash2 } from "react-icons/lu";
-import { FaPlus } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
+
+import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -137,16 +138,16 @@ export const Teachers = () => {
 				<Typography.Title level={3}>
 					Teachers
 				</Typography.Title>
+
 				<Button
-					type="text"
+					icon={<PlusOutlined></PlusOutlined>}
+					type="primary"
 					onClick={() => {
 						form.resetFields();
 						setEditingTeacher(null);
 						setOpen(true);
 					}}
-				>
-					<FaPlus />
-				</Button>
+				></Button>
 			</div>
 			<Table
 				columns={columns}
@@ -176,14 +177,24 @@ export const Teachers = () => {
 					<Form.Item
 						label="First Name"
 						name={"firstName"}
-						rules={[{ required: true }]}
+						rules={[
+							{
+								required: true,
+								message: "Please enter first name",
+							},
+						]}
 					>
 						<Input />
 					</Form.Item>
 					<Form.Item
 						label="Last Name"
 						name={"lastName"}
-						rules={[{ required: true }]}
+						rules={[
+							{
+								required: true,
+								message: "Please enter last name",
+							},
+						]}
 					>
 						<Input />
 					</Form.Item>
