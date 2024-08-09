@@ -11,24 +11,23 @@ import { ClassData, StudentData, TeacherData } from "./Data";
 import { RouteContext, RouteData } from "./Context";
 import { Dashboard } from "./Pages/Dashboard";
 import Layout from "./Layout";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, App as AntdApp } from "antd";
 
 const pages: Record<string, React.ReactNode> = {
-  Dashboard: <Dashboard />,
-  Teachers: <Teachers />,
-  Students: <Students />,
-  Classes: <Classes />,
-  Parents: <Parents />,
-  Timetable: <Timetable />,
-  Marks: <Marks />,
+	Dashboard: <Dashboard />,
+	Teachers: <Teachers />,
+	Students: <Students />,
+	Classes: <Classes />,
+	Parents: <Parents />,
+	Timetable: <Timetable />,
+	Marks: <Marks />,
 };
 
 function App() {
-  const [classes, setClasses] = useState<IClass[]>(ClassData);
-  const [teachers, setTeachers] = useState<ITeacher[]>(TeacherData);
-  const [students, setStudents] = useState<IStudent[]>(StudentData);
-  const [activePage, setActivePage] = useState("Dashboard");
-
+	const [classes, setClasses] = useState<IClass[]>(ClassData);
+	const [teachers, setTeachers] = useState<ITeacher[]>(TeacherData);
+	const [students, setStudents] = useState<IStudent[]>(StudentData);
+	const [activePage, setActivePage] = useState("Dashboard");
 
 	return (
 		<ConfigProvider
@@ -47,7 +46,9 @@ function App() {
 						setStudents,
 					}}
 				>
-					<Layout>{pages[activePage]}</Layout>
+					<AntdApp>
+						<Layout>{pages[activePage]}</Layout>
+					</AntdApp>
 				</RouteData.Provider>
 			</RouteContext.Provider>
 		</ConfigProvider>
