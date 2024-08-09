@@ -18,7 +18,8 @@ import { v4 as uuidv4 } from "uuid";
 const { Option } = Select;
 
 export const Classes = () => {
-	const { classes, setClasses, teachers } = useRouteData();
+	const { classes, setClasses, teachers, students } =
+		useRouteData();
 	const [open, setOpen] = useState(false);
 	const [form] = Form.useForm();
 	const [editingClass, setEditingClass] = useState<IClass | null>(
@@ -42,7 +43,12 @@ export const Classes = () => {
 			title: "Students Count",
 			dataIndex: "id",
 			key: "id",
-			render: () => "0",
+			render: (value: string | number) => {
+				const student = students.filter(
+					(s) => s.classId == value
+				);
+				return `${student.length}`;
+			},
 		},
 		{
 			title: "Teacher",
