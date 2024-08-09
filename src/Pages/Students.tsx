@@ -1,18 +1,17 @@
 import React, { useContext, useState } from "react";
 import { RouteData } from "../Context";
-import { Typography, Upload } from "antd";
+import { Typography } from "antd";
 import { IStudent } from "../Types";
 import { Table } from "antd";
-import { TableProps, Avatar, Flex, Modal } from "antd";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { TableProps, Flex, Modal } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { CiEdit } from "react-icons/ci";
+import { LuTrash2 } from "react-icons/lu";
 import { v4 as uuidv4 } from "uuid";
 import { Button, Select, Form, Input } from "antd";
 
 const { Title } = Typography;
 const { Option } = Select;
-const normFile = (e: any) => {
-  return e?.fileList;
-};
 
 export const Students = () => {
   const { teachers, classes, students, setStudents } = useContext(RouteData);
@@ -97,16 +96,6 @@ export const Students = () => {
       key: "id",
     },
     {
-      title: "Photo",
-      dataIndex: "photo",
-      key: "id",
-      render: (values: string, item: IStudent) => {
-        return (
-          <Avatar size={"large"}>{item.firstName[0].toUpperCase()}</Avatar>
-        );
-      },
-    },
-    {
       title: "Actions",
       dataIndex: "id",
       key: "id",
@@ -122,24 +111,25 @@ export const Students = () => {
                   firstName: item.firstName,
                   lastName: item.lastName,
                   adress: item.adress,
-                  photo: item.photo,
                   phone: item.phone,
                 });
                 setIsModalOpen(true);
               }}
               style={{ color: "blue" }}
               type="text"
-              size="small"
+              className="text-lg"
+              size="middle"
             >
-              <EditOutlined />
+              <CiEdit></CiEdit>
             </Button>
             <Button
               onClick={() => handleDelete(item.id)}
               style={{ color: "red" }}
+              className="text-lg"
               type="text"
-              size="small"
+              size="middle"
             >
-              <DeleteOutlined />
+              <LuTrash2></LuTrash2>
             </Button>
           </React.Fragment>
         );
@@ -215,18 +205,6 @@ export const Students = () => {
             <Form.Item className="item" name={"phone"} label="Phone">
               <Input></Input>
             </Form.Item>
-            <Form.Item
-              label="Image"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
-            >
-              <Upload maxCount={1} action="/upload.do" listType="picture-card">
-                <button style={{ border: 0, background: "none" }} type="button">
-                  <PlusOutlined />
-                  <div style={{ marginTop: 8 }}>Upload</div>
-                </button>
-              </Upload>
-            </Form.Item>
             <Form.Item style={{ display: "flex", justifyContent: "end" }}>
               <Button
                 style={{ marginRight: 4 }}
@@ -239,11 +217,7 @@ export const Students = () => {
           </Form>
         </Modal>
       </Flex>
-      <Table
-        columns={columns}
-        dataSource={students}
-        scroll={{ y: 400 }}
-      ></Table>
+      <Table columns={columns} dataSource={students}></Table>
       <Title level={3}>{`All student count: ${students.length}`}</Title>
     </>
   );
