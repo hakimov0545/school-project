@@ -21,6 +21,8 @@ import { LuTrash2 } from "react-icons/lu";
 import { FaPlus } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 
+import { PlusOutlined } from "@ant-design/icons";
+
 const { Option } = Select;
 
 export const Classes = () => {
@@ -147,15 +149,14 @@ export const Classes = () => {
 			<div className="flex items-center justify-between mb-1">
 				<Typography.Title level={3}>Classes</Typography.Title>
 				<Button
-					type="text"
+					icon={<PlusOutlined></PlusOutlined>}
+					type="primary"
 					onClick={() => {
 						form.resetFields();
 						setEditingClass(null);
 						setOpen(true);
 					}}
-				>
-					<FaPlus />
-				</Button>
+				></Button>
 			</div>
 			<Table
 				columns={columns}
@@ -183,7 +184,12 @@ export const Classes = () => {
 					<Form.Item
 						label="Name"
 						name={"name"}
-						rules={[{ required: true }]}
+						rules={[
+							{
+								required: true,
+								message: "Please enter class name",
+							},
+						]}
 					>
 						<Input />
 					</Form.Item>
