@@ -43,7 +43,15 @@ function createParentData(
   };
 }
 export const ParentData = [
-  createParentData(1, "Mirjalol", "Qosimov", 1, "ota", "12345678", "adress"),
+  createParentData(
+    1,
+    "Mirjalol",
+    "Qosimov",
+    1,
+    "ota",
+    "12345678",
+    "street-12-68"
+  ),
 ];
 function createTeacherData(
   id: number | string,
