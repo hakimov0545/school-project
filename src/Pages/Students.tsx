@@ -1,20 +1,24 @@
 import React, { useContext, useState } from "react";
 import { RouteData } from "../Context";
-import { Typography } from "antd";
+import { Typography, Upload } from "antd";
 import { IStudent } from "../Types";
 import { Table } from "antd";
-import { Button } from "antd";
 import { TableProps, Avatar, Flex, Modal } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { v4 as uuidv4 } from "uuid";
+import { Button, Select, Form, Input } from "antd";
+
 const { Title } = Typography;
+const { Option } = Select;
+const normFile = (e: any) => {
+  return e?.fileList;
+};
 
 export const Students = () => {
   const { teachers, classes, students, setStudents } = useContext(RouteData);
+  const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const [Edit, setEdit] = useState<IStudent | null>(null);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -22,6 +26,28 @@ export const Students = () => {
   function handleDelete(id: number | string) {
     const updateStudents = students.filter((t) => t.id !== id);
     setStudents(updateStudents);
+  }
+  const handleClassChange = (value: number | string) => {
+    const teacher = teachers.find((t) => t.classId === value);
+    form.setFieldsValue({
+      teacherId: teacher ? teacher.id : "",
+      teacherName: teacher ? teacher.firstName : "",
+    });
+  };
+  function handleAdd(
+    values: Omit<IStudent, "id" | "teacherName"> & { teacherName?: string }
+  ) {
+    const { teacherName, ...other } = values;
+    if (Edit === null) {
+      const newStudent: IStudent = { ...other, id: uuidv4() };
+      setStudents([...students, newStudent]);
+      console.log(newStudent);
+    } else {
+      const updateStudent: IStudent[] = students.map((s) =>
+        s.id === Edit.id ? { ...s, ...other } : s
+      );
+      setStudents(updateStudent);
+    }
   }
   const columns: TableProps<IStudent>["columns"] = [
     {
@@ -75,7 +101,9 @@ export const Students = () => {
       dataIndex: "photo",
       key: "id",
       render: (values: string, item: IStudent) => {
-        return <Avatar size={"large"}>{item.firstName[0]}</Avatar>;
+        return (
+          <Avatar size={"large"}>{item.firstName[0].toUpperCase()}</Avatar>
+        );
       },
     },
     {
@@ -86,7 +114,19 @@ export const Students = () => {
         return (
           <React.Fragment>
             <Button
-              onClick={showModal}
+              onClick={() => {
+                setEdit(item);
+                form.setFieldsValue({
+                  teacherId: item.teacherId,
+                  classId: item.classId,
+                  firstName: item.firstName,
+                  lastName: item.lastName,
+                  adress: item.adress,
+                  photo: item.photo,
+                  phone: item.phone,
+                });
+                setIsModalOpen(true);
+              }}
               style={{ color: "blue" }}
               type="text"
               size="small"
@@ -116,7 +156,11 @@ export const Students = () => {
         <Button
           icon={<PlusOutlined></PlusOutlined>}
           type="primary"
-          onClick={showModal}
+          onClick={() => {
+            form.resetFields();
+            setEdit(null);
+            setIsModalOpen(true);
+          }}
         ></Button>
         <Modal
           title="Student"
@@ -124,15 +168,83 @@ export const Students = () => {
           onCancel={handleCancel}
           footer={null}
         >
-          asdasdsada
+          <Form
+            style={{ height: 500, overflowY: "auto" }}
+            form={form}
+            layout="vertical"
+            onFinish={handleAdd}
+          >
+            <Form.Item
+              className="item"
+              name={"firstName"}
+              label="First Name"
+              rules={[{ required: true }]}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              className="item"
+              name={"lastName"}
+              label="Last Name"
+              rules={[{ required: true }]}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              label="Class"
+              name={"classId"}
+              rules={[{ required: true }]}
+            >
+              <Select onChange={handleClassChange}>
+                {classes.map((c) => (
+                  <Option key={c.id} value={c.id}>
+                    {c.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item className="item" name="teacherName" label="Teacher">
+              <Input disabled />
+            </Form.Item>
+            <Form.Item name="teacherId" hidden>
+              <Input />
+            </Form.Item>
+            <Form.Item className="item" name={"adress"} label="Adress">
+              <Input></Input>
+            </Form.Item>
+            <Form.Item className="item" name={"phone"} label="Phone">
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              label="Image"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+            >
+              <Upload maxCount={1} action="/upload.do" listType="picture-card">
+                <button style={{ border: 0, background: "none" }} type="button">
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </button>
+              </Upload>
+            </Form.Item>
+            <Form.Item style={{ display: "flex", justifyContent: "end" }}>
+              <Button
+                style={{ marginRight: 4 }}
+                type="primary"
+                onClick={() => form.submit()}
+              >
+                {Edit === null ? "Add" : "Update"}
+              </Button>
+            </Form.Item>
+          </Form>
         </Modal>
       </Flex>
       <Table
         columns={columns}
         dataSource={students}
-        scroll={{ y: 440 }}
+        scroll={{ y: 400 }}
       ></Table>
+      <Title level={3}>{`All student count: ${students.length}`}</Title>
     </>
   );
-
 };
